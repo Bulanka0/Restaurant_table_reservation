@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Система бронирования столиков ресторана
 
 **Курсовая работа по дисциплине:** Технологии программирования
@@ -46,3 +47,6 @@
 | `working_hours` | График работы (id, day_of_week, open_time, close_time, is_working_day) |
 
 ---
+=======
+# Restaurant_table_reservation
+>>>>>>> 146630f545c629b348241a454f9d79dc0d4fd82c
