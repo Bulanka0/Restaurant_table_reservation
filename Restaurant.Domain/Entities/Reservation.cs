@@ -4,7 +4,7 @@ using Restaurant.Domain.Exceptions;
 
 namespace Restaurant.Domain.Entities;
 
-/// бронь столика
+//бронь столика
 public class Reservation : Entity<Guid>
 {
     public Guid ClientId { get; private set; }
@@ -47,7 +47,7 @@ public class Reservation : Entity<Guid>
         Status = ReservationStatus.Pending;
     }
 
-    // подтвердить бронь(только администратор)
+    //подтвердить бронь(только администратор)
     public void Confirm(Guid adminId)
     {
         if (Status != ReservationStatus.Pending)
@@ -57,33 +57,33 @@ public class Reservation : Entity<Guid>
         Status = ReservationStatus.Confirmed;
     }
 
-    // отменить бронь(клиент или администратор)
+    //отменить бронь(клиент или администратор)
     public void Cancel()
     {
         if (Status == ReservationStatus.Cancelled)
             throw new ReservationAlreadyCancelledException(Id);
 
         if (Status == ReservationStatus.Expired)
-            throw new InvalidOperationException($"Нельзя отменить истёкшую бронь '{Id}'.");
+            throw new InvalidReservationStatusException(Id, "нельзя отменить истёкшую бронь.");
 
         Status = ReservationStatus.Cancelled;
     }
 
-    // истёкшая, клиент не пришёл в течение 15 минут
+    //истёкшая, клиент не пришёл в течение 15 минут
     public void Expire()
     {
         if (Status != ReservationStatus.Confirmed)
-            throw new InvalidOperationException($"Бронь '{Id}' нельзя пометить как истёкшую: она не подтверждена.");
+            throw new InvalidReservationStatusException(Id, "бронь нельзя пометить как истёкшую: она не подтверждена.");
 
         Status = ReservationStatus.Expired;
     }
 
-    // перенести бронь на другое время или другой столик
-    // для повторного подтверждения
+    //перенести бронь на другое время или другой столик
+    //для повторного подтверждения
     public void Transfer(int newTableId, DateTime newStartTime, DateTime newEndTime, int newGuestsCount)
     {
         if (Status != ReservationStatus.Pending && Status != ReservationStatus.Confirmed)
-            throw new InvalidOperationException($"Бронь '{Id}' нельзя перенести: статус '{Status}'.");
+            throw new InvalidReservationStatusException(Id, $"нельзя перенести: статус '{Status}'.");
 
         if (newStartTime <= DateTime.UtcNow)
             throw new InvalidReservationTimeException(newStartTime);

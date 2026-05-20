@@ -5,12 +5,12 @@ namespace Restaurant.Domain.Repositories.Abstractions;
 
 public interface IReservationRepository : IRepository<Reservation, Guid>
 {
-    Task<IEnumerable<Reservation>> GetByClientIdAsync(Guid clientId, CancellationToken cancellationToken);
+    Task<IReadOnlyList<Reservation>> GetByClientIdAsync(Guid clientId, CancellationToken cancellationToken);
 
-    Task<IEnumerable<Reservation>> GetByDateAsync(DateTime date, CancellationToken cancellationToken);
+    Task<IReadOnlyList<Reservation>> GetByDateAsync(DateTime date, CancellationToken cancellationToken);
 
-    Task<IEnumerable<Reservation>> GetByStatusAsync(ReservationStatus status, CancellationToken cancellationToken);
+    Task<IReadOnlyList<Reservation>> GetByStatusAsync(ReservationStatus status, CancellationToken cancellationToken);
 
     //для проверки 15-минутного правила
-    Task<IEnumerable<Reservation>> GetExpiredConfirmedAsync(DateTime olderThan, CancellationToken cancellationToken);
+    Task<IReadOnlyList<Reservation>> GetExpiredConfirmedAsync(DateTime olderThan, CancellationToken cancellationToken);
 }

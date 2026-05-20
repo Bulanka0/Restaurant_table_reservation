@@ -2,15 +2,15 @@ namespace Restaurant.Domain.Enums;
 
 public enum ReservationStatus
 {
-    /// <summary>Ожидает подтверждения администратором</summary>
+    //ожидает подтверждения администратором
     Pending,
 
-    /// <summary>Подтверждена администратором</summary>
+    //подтверждена администратором
     Confirmed,
 
-    /// <summary>Отменена клиентом или администратором</summary>
+    //отменена клиентом или администратором
     Cancelled,
 
-    /// <summary>Истекла — клиент не пришёл в течение 15 минут</summary>
+    //истекла — клиент не пришёл в течение 15 минут
     Expired
 }
