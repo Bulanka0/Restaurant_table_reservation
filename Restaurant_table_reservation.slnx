@@ -4,4 +4,5 @@
   <Project Path="Restaurant.ValueObjects/Restaurant.ValueObjects.csproj" />
   <Project Path="Restaurant.Domain.Repositories.Abstractions/Restaurant.Domain.Repositories.Abstractions.csproj" />
   <Project Path="Restaurant.Domain.Services/Restaurant.Domain.Services.csproj" />
+  <Project Path="Restaurant.Infrastructure.EntityFramework/Restaurant.Infrastructure.EntityFramework.csproj" />
 </Solution>
