@@ -7,8 +7,8 @@ namespace Restaurant.Domain.Entities;
 //бронь столика
 public class Reservation : Entity<Guid>
 {
-    public Guid ClientId { get; private set; }
-    public int TableId { get; private set; }
+    public Client Client { get; private set; } = default!;
+    public Table Table { get; private set; } = default!;
     public Guid? ConfirmedBy { get; private set; }
     public DateTime StartTime { get; private set; }
     public DateTime EndTime { get; private set; }
@@ -19,16 +19,19 @@ public class Reservation : Entity<Guid>
     {
     }
 
-    public Reservation(Guid clientId, int tableId, DateTime startTime, DateTime endTime, int guestsCount)
-        : this(Guid.NewGuid(), clientId, tableId, startTime, endTime, guestsCount)
+    public Reservation(Client client, Table table, DateTime startTime, DateTime endTime, int guestsCount)
+        : this(Guid.NewGuid(), client, table, startTime, endTime, guestsCount)
     {
     }
 
-    protected Reservation(Guid id, Guid clientId, int tableId, DateTime startTime, DateTime endTime, int guestsCount)
+    protected Reservation(Guid id, Client client, Table table, DateTime startTime, DateTime endTime, int guestsCount)
         : base(id)
     {
-        if (clientId == Guid.Empty)
-            throw new ArgumentNullValueException(nameof(clientId));
+        if (client is null)
+            throw new ArgumentNullValueException(nameof(client));
+
+        if (table is null)
+            throw new ArgumentNullValueException(nameof(table));
 
         if (guestsCount <= 0)
             throw new InvalidGuestsCountException(guestsCount);
@@ -39,8 +42,8 @@ public class Reservation : Entity<Guid>
         if (endTime <= startTime)
             throw new InvalidReservationTimeException(endTime);
 
-        ClientId = clientId;
-        TableId = tableId;
+        Client = client;
+        Table = table;
         StartTime = startTime;
         EndTime = endTime;
         GuestsCount = guestsCount;
@@ -80,10 +83,13 @@ public class Reservation : Entity<Guid>
 
     //перенести бронь на другое время или другой столик
     //для повторного подтверждения
-    public void Transfer(int newTableId, DateTime newStartTime, DateTime newEndTime, int newGuestsCount)
+    public void Transfer(Table newTable, DateTime newStartTime, DateTime newEndTime, int newGuestsCount)
     {
         if (Status != ReservationStatus.Pending && Status != ReservationStatus.Confirmed)
             throw new InvalidReservationStatusException(Id, $"нельзя перенести: статус '{Status}'.");
+
+        if (newTable is null)
+            throw new ArgumentNullValueException(nameof(newTable));
 
         if (newStartTime <= DateTime.UtcNow)
             throw new InvalidReservationTimeException(newStartTime);
@@ -94,7 +100,7 @@ public class Reservation : Entity<Guid>
         if (newGuestsCount <= 0)
             throw new InvalidGuestsCountException(newGuestsCount);
 
-        TableId = newTableId;
+        Table = newTable;
         StartTime = newStartTime;
         EndTime = newEndTime;
         GuestsCount = newGuestsCount;

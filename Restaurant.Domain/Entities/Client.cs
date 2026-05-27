@@ -6,8 +6,13 @@ namespace Restaurant.Domain.Entities;
 
 public class Client : Entity<Guid>
 {
+    private readonly ICollection<Reservation> _reservations = [];
+
     public PersonName Name { get; private set; } = default!;
     public Phone Phone { get; private set; } = default!;
+
+    public IReadOnlyCollection<Reservation> Reservations =>
+        _reservations.ToList().AsReadOnly();
 
     protected Client()
     {

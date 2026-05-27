@@ -40,7 +40,7 @@ public class ReservationService
         if (guestsCount > table.Seats)
             throw new TableSeatsExceededException(guestsCount, table.Seats);
 
-        return new Reservation(client.Id, table.Id, startTime, endTime, guestsCount);
+        return new Reservation(client, table, startTime, endTime, guestsCount);
     }
 
     //Перенести бронь на другое время или столик
@@ -77,6 +77,6 @@ public class ReservationService
         if (newGuestsCount > newTable.Seats)
             throw new TableSeatsExceededException(newGuestsCount, newTable.Seats);
 
-        reservation.Transfer(newTable.Id, newStartTime, newEndTime, newGuestsCount);
+        reservation.Transfer(newTable, newStartTime, newEndTime, newGuestsCount);
     }
 }
